@@ -30,7 +30,7 @@ class HameScreenState extends State<HameScreen> {
     return result;
   }
 
-  String? _validateUsername(String? value) {
+  String? _validateInputs(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a value.';
     }
@@ -114,6 +114,7 @@ class HameScreenState extends State<HameScreen> {
                       child: TextFormField(
                         controller: _rowsController,
                         keyboardType: TextInputType.number,
+                        validator: _validateInputs,
                         decoration: const InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.fromLTRB(10, 12, 0, 12),
@@ -126,6 +127,7 @@ class HameScreenState extends State<HameScreen> {
                     SizedBox(
                       child: TextFormField(
                         keyboardType: TextInputType.number,
+                        validator: _validateInputs,
                         controller: _columnsController,
                         decoration: const InputDecoration(
                           isDense: true,
@@ -174,10 +176,23 @@ class HameScreenState extends State<HameScreen> {
                         controller: _mxnController,
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding: EdgeInsets.fromLTRB(10, 12, 0, 12),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(10, 12, 0, 12),
                           labelText: "Enter $mxnValue Characters",
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                         ),
+                        validator: (value) {
+                          int length = value?.length ?? 0;
+                          int maxLength = int.tryParse(mxnValue) ?? 0;
+
+                          if (length != maxLength) {
+                            return "Length should be $maxLength characters.";
+                          }
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a value.';
+                          }
+                          return null; // Return null if the validation passes
+                        },
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -202,13 +217,13 @@ class HameScreenState extends State<HameScreen> {
                             onPress: () {
                               // Handle MxN characters submission
                               if (_formKey.currentState!.validate()) {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ShowGridview(
                                         m: int.parse(_rowsController.text),
                                         n: int.parse(_columnsController.text),
-                                        word: wordTo2DArray(
+                                        girdData: wordTo2DArray(
                                             _mxnController.text,
                                             int.parse(_rowsController.text),
                                             int.parse(
@@ -216,7 +231,7 @@ class HameScreenState extends State<HameScreen> {
                                   ),
                                 );
                               }
-                              FindWord().run();
+                              //   FindWord().run();
                             },
                             btnColor: Colors.orange,
                             textColor: Colors.white,
