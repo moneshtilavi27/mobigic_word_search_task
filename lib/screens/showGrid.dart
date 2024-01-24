@@ -57,8 +57,12 @@ class _ShowGridviewState extends State<ShowGridview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Grid View $widget.m X $widget.n"),
-        backgroundColor: Colors.green,
+        title: Text(
+          "Grid View ${widget.m} X ${widget.n}",
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.grey[200],
+        foregroundColor: Color.fromARGB(255, 100, 110, 248),
         centerTitle: true,
       ),
       body: Padding(
